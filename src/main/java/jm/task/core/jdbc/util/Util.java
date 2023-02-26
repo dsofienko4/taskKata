@@ -88,21 +88,32 @@ public class Util {
     private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
+        // проверяем, была ли уже создана фабрика сессий. Если нет, то создаём её с помощью конфигурации
         if (sessionFactory == null) {
+            // создаём объект конфигурации
             Configuration configuration = new Configuration();
-            configuration.addAnnotatedClass(User.class); // добавляем класс-сущность для маппинга
+            // добавляем класс-сущность для маппинга
+            configuration.addAnnotatedClass(User.class);
+            // задаём настройки соединения с БД
             configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
             configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/taskKata");
             configuration.setProperty("hibernate.connection.username", "root");
             configuration.setProperty("hibernate.connection.password", "root");
+            // задаём диалект СУБД для Hibernate
             configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-            configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop"); // автоматическое создание и удаление таблиц
-            configuration.setProperty("hibernate.show_sql", "true"); // выводить SQL-запросы в консоль
-            configuration.setProperty("hibernate.format_sql", "true"); // форматировать SQL-запросы
+            // задаём режим автоматического создания и удаления таблиц при старте и остановке приложения
+            configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+            // задаём вывод SQL-запросов в консоль
+            configuration.setProperty("hibernate.show_sql", "true");
+            // форматируем вывод SQL-запросов для удобства чтения
+            configuration.setProperty("hibernate.format_sql", "true");
+            // создаём объект для настройки реестра сервисов Hibernate
             StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties());
+            // создаём фабрику сессий на основе настроек конфигурации и реестра сервисов Hibernate
             sessionFactory = configuration.buildSessionFactory(builder.build());
         }
+        // возвращаем фабрику сессий
         return sessionFactory;
     }
 }

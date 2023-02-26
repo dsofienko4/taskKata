@@ -18,7 +18,8 @@ public class UserDaoHibernateImpl implements UserDao {
                 " name VARCHAR(50) NOT NULL, " +
                 " last_name VARCHAR(50) NOT NULL, " +
                 " age TINYINT NOT NULL)";
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try {
+            Session session = Util.getSessionFactory().openSession();
             session.createSQLQuery(query).executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,7 +29,8 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void dropUsersTable() {
         String query = "DROP TABLE IF EXISTS users";
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try {
+            Session session = Util.getSessionFactory().openSession();
             session.createSQLQuery(query).executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,7 +40,8 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void saveUser(String name, String lastName, byte age) {
         User user = new User(name, lastName, age);
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try {
+            Session session = Util.getSessionFactory().openSession();
             session.save(user);
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,8 +50,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        try (Session session = Util.getSessionFactory().openSession()) {
-            User user = session.get(User.class, id);
+        try {Session session = Util.getSessionFactory().openSession();
+            User user = (User) session.get(User.class, id);
             if (user != null) {
                 session.delete(user);
             }
@@ -63,7 +66,7 @@ public class UserDaoHibernateImpl implements UserDao {
         List<User> userList = null;
         try {
             session = Util.getSessionFactory().openSession();
-            userList = session.createQuery("FROM User", User.class).list();
+            userList = session.createQuery("FROM User").list();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
