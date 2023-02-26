@@ -10,6 +10,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+
+
+import jm.task.core.jdbc.model.User;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 public class Util {
     private static Connection conn = null;
     private static Util instance = null;
@@ -76,5 +82,27 @@ public class Util {
         } catch (IOException | URISyntaxException e) {
             throw new IOException("Database config file not found", e);
         }
+    }
+
+
+    private static SessionFactory sessionFactory;
+
+    public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            Configuration configuration = new Configuration();
+            configuration.addAnnotatedClass(User.class); // добавляем класс-сущность для маппинга
+            configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+            configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/taskKata");
+            configuration.setProperty("hibernate.connection.username", "root");
+            configuration.setProperty("hibernate.connection.password", "root");
+            configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+            configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop"); // автоматическое создание и удаление таблиц
+            configuration.setProperty("hibernate.show_sql", "true"); // выводить SQL-запросы в консоль
+            configuration.setProperty("hibernate.format_sql", "true"); // форматировать SQL-запросы
+            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties());
+            sessionFactory = configuration.buildSessionFactory(builder.build());
+        }
+        return sessionFactory;
     }
 }
