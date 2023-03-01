@@ -76,6 +76,7 @@ public class UserDaoJDBCImpl implements UserDao {
     // Добавляем пользователя в список
     // Если возникает ошибка, выводим ее сообщение в консоль
     // Возвращаем список пользователей
+
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users");

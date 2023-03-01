@@ -1,5 +1,4 @@
 package jm.task.core.jdbc.util;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -9,9 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
-
-
 import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -66,7 +62,6 @@ public class Util {
         }
         return conn;
     }
-
     /**
      * Читает конфигурационный файл database.properties из ресурсов приложения
      * и возвращает его в виде объекта Properties.
